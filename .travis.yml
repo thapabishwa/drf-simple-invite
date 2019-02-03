@@ -9,8 +9,7 @@ python:
 before_script:
 - pip install -r requirements.txt
 script:
-- echo $GIT_TAG
-- echo $TRAVIS_TAG
+- true 
 notifications:
   email: false
 cache:
@@ -18,8 +17,6 @@ cache:
 deploy:
 - provider: script
   skip_cleanup: true
-  before_script: pip install twine
   script: python setup.py sdist && twine upload dist/*  --verbose
   on:
-    branch: master
     tags: true
