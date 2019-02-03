@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='drf_simple_invite',
-    version='0.0.1',
+    version='0.1.0',
     packages=find_packages(),
     include_package_data=True,
     license='BSD License',
@@ -21,7 +21,7 @@ setup(
     author='Bishwa Thapa',
     author_email='thapabishwa@aol.com',
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
         'Framework :: Django :: 2.0',
         'Framework :: Django :: 2.1',
