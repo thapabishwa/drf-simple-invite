@@ -17,6 +17,6 @@ cache:
 deploy:
 - provider: script
   skip_cleanup: true
-  script: python setup.py sdist && twine upload dist/*  --verbose
+  script: sed -i s/TRAVIS_TAG/$TRAVIS_TAG/ setup.py && python setup.py sdist && twine upload dist/*  --verbose
   on:
     tags: true
