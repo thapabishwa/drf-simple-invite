@@ -21,5 +21,5 @@ class InvitationTokenViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             invitation_token.user.set_password(password)
             invitation_token.user.save()
             InvitationToken.objects.filter(user=invitation_token.user).delete()
-            return Response({'detail': 'Password sucessfully created'}, status=status.HTTP_201_CREATED)
-        return Response({'detail': 'Cannot Find Invitation Token'}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'detail': 'Password sucessfully created.'}, status=status.HTTP_201_CREATED)
+        return Response({'detail': 'Cannot Find Invitation Token in the url.'}, status=status.HTTP_204_NO_CONTENT)
