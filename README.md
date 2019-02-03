@@ -1,4 +1,4 @@
-# Django Rest User Invitation
+# Django Rest User Invitation [![Build Status](https://travis-ci.org/thapabishwa/drf_simple_invite.svg?branch=develop)](https://travis-ci.org/thapabishwa/drf_simple_invite)
 
 The primary aim of this python package is to provides a simple user invitation strategy for django rest framework, where users can be invited using invitation tokens (by sending email to the provided e-mail address).
 
