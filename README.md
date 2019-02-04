@@ -45,6 +45,7 @@ The following endpoints are provided:
  * `POST ${API_URL}/{invitation_token}` -  set password token by using the ``invitation_token`` parameter
  
 where `${API_URL}/` is the url specified in your *urls.py* (e.g., `api/v1/invite/`)
+and `{invitation_token}` is base64(urlsafe) encoded uuid token.
  
 
 ### Configuration / Settings
@@ -59,8 +60,19 @@ The following settings can be set in Djangos ``settings.py`` file:
 post_save signals must be used to instantiate/create invitation token as well as send emails to the target user.
 
 #### Examples:
-TODO:
+```
+from django.conf import settings
+from drf_simple_invite import InvitationToken
+AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
+@register(post_save, sender=AUTH_USER_MODEL)
+def create_invitation_token(sender, instance):
+    
+@register(post_save, sender=InvitationToken):
+def send_email(sender, instance):
+
+
+```
 ### Tests
 TODO:
 

@@ -1,3 +1,5 @@
+import base64
+
 from django.shortcuts import get_object_or_404
 from rest_framework import renderers
 from rest_framework import viewsets, mixins, status
@@ -14,12 +16,16 @@ class InvitationTokenViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     renderer_classes = (renderers.JSONRenderer, renderers.BrowsableAPIRenderer)
 
     def create(self, request,*args, **kwargs ):
-
-        if 'invitation_token' in kwargs:
-            invitation_token = get_object_or_404(InvitationToken, id=self.kwargs['invitation_token'])
-            password = self.request.data['password']
-            invitation_token.user.set_password(password)
-            invitation_token.user.save()
-            InvitationToken.objects.filter(user=invitation_token.user).delete()
-            return Response({'detail': 'Password sucessfully created.'}, status=status.HTTP_201_CREATED)
-        return Response({'detail': 'Cannot Find Invitation Token in the url.'}, status=status.HTTP_204_NO_CONTENT)
+        try:
+            if 'invitation_token' in kwargs:
+                invitation_token = kwargs['invitation_token']
+                decoded_token = base64.url_sage_b64decode(invitation_token.encode()).decode()
+                invitation_token = get_object_or_404(InvitationToken, id=decoded_token)
+                password = self.request.data['password']
+                invitation_token.user.set_password(password)
+                invitation_token.user.save()
+                InvitationToken.objects.filter(user=invitation_token.user).delete()
+                return Response({'detail': 'Password sucessfully created.'}, status=status.HTTP_201_CREATED)
+            return Response({'detail': 'Cannot Find Invitation Token in the url.'}, status=status.HTTP_204_NO_CONTENT)
+        except:
+            pass
