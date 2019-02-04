@@ -9,7 +9,7 @@ This package provides a REST endpoint that verifies an token and set the passwor
 1. Install the package from pypi using pip [Package is not yet published in pypi]:
 TODO:
 ```bash
-pip install drf_simple_invite
+pip install drf-simple-invite
 ```
 
 2. Add ``drf_simple_invite`` to your ``INSTALLED_APPS`` (after ``rest_framework``) within your Django settings file:
@@ -45,8 +45,8 @@ The following endpoints are provided:
  * `POST ${API_URL}/{invitation_token}` -  set password token by using the ``invitation_token`` parameter
  
 where `${API_URL}/` is the url specified in your *urls.py* (e.g., `api/v1/invite/`)
-and `{invitation_token}` is base64(urlsafe) encoded uuid token.
- 
+and `{invitation_token}` is `base64.urlsafe` encoded uuid token. Since it is unsafe to sendout plain uuid, always make sure that the `{invitation_token}` is `base64.urlsafe` encoded
+
 
 ### Configuration / Settings
 
@@ -67,14 +67,19 @@ AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 @register(post_save, sender=AUTH_USER_MODEL)
 def create_invitation_token(sender, instance):
-    
+    InvitationToken.objects.create(user=instance)
+```
+```
+import base64
+from drf_simple_invite import InvitationToken
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
+from django.urls import reverse_lazy
+
 @register(post_save, sender=InvitationToken):
 def send_email(sender, instance):
-
-
-```
-### Tests
-TODO:
-
-
-
+    api_root=reverse_lazy('drf_simple_invite')
+    encoded = base64.urlsafe_b64encode(instance.id.encode()).decode()
+    api_root = api_root + encoded
+    return send_mail('Invitation token for %s'%s instance.user.email, 
+                    api_root, "superuser@yourdomain.com", [instance.user.email, ], fail_silently=False)
