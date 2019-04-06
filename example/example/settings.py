@@ -37,8 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
+
+    # Third party apps
+    'rest_framework',  # utilities for rest apis
+    'rest_framework.authtoken',  # token
+
+    # Simple Invite
     'drf_simple_invite',
+
+    # Custom User Model
     'users',
 ]
 

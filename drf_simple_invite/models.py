@@ -6,7 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 
 
-
 class InvitationToken(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -20,17 +19,11 @@ class InvitationToken(models.Model):
         default="127.0.0.1"
     )
 
-
     user_agent = models.CharField(
         max_length=256,
         verbose_name=_("HTTP User Agent"),
         default=""
     )
-
-
-    def __str__(self):
-        return "Invitation token for user %s is %s." % (user, id)
-    
 
 
 def get_invitation_token_expiry_time():
