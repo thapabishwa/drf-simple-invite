@@ -28,13 +28,14 @@ class SetUserPasswordViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 validate_password(password, user=invitation_token.user,
                                   password_validators=get_password_validators(settings.AUTH_PASSWORD_VALIDATORS))
                 invitation_token.user.set_password(password)
+                invitation_token.user.is_active = True
                 invitation_token.user.save()
                 InvitationToken.objects.filter(user=invitation_token.user).delete()
                 return Response({'detail': 'Password sucessfully created.'}, status=status.HTTP_201_CREATED)
             except ValidationError as e:
                 raise serializers.ValidationError(e.messages)
 
-            return Response({'detail': 'Cannot Find Invitation Token in the url.'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'detail': 'Cannot Find Invitation Token in the url.'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class InviteUserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -44,9 +45,7 @@ class InviteUserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         email = request.data['email']
-        print(email)
         users = get_object_or_404(get_user_model(), email=email)
         InvitationToken.objects.create(user=users)
         return Response({'detail': 'Invite User Done'}, status=status.HTTP_200_OK)
