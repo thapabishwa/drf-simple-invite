@@ -1,13 +1,13 @@
 from rest_framework import serializers
+
 from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name',)
-        read_only_fields = ('username', )
+        read_only_fields = ('username',)
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -20,4 +20,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ('password','is_staff', 'is_superuser', 'is_active', 'is_verified', 'groups','user_permissions', 'last_login', 'username')
+        exclude = (
+        'password', 'is_staff', 'is_superuser', 'is_active', 'is_verified', 'groups', 'user_permissions', 'last_login',
+        'username')

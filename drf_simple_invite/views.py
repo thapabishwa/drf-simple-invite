@@ -1,6 +1,7 @@
 import base64
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password, get_password_validators
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
@@ -11,13 +12,12 @@ from rest_framework.response import Response
 from .models import InvitationToken
 from .serializers import PasswordSerializer, EmailSerializer
 
-from django.contrib.auth import get_user_model
 
 class SetUserPasswordViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = (AllowAny,)
     serializer_class = PasswordSerializer
 
-    def create(self, request,*args, **kwargs ):
+    def create(self, request, *args, **kwargs):
         if 'invitation_token' in kwargs:
             invitation_token = kwargs['invitation_token']
             decoded_token = base64.urlsafe_b64decode(invitation_token.encode()).decode()
@@ -25,7 +25,8 @@ class SetUserPasswordViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             password = self.request.data['password']
 
             try:
-                validate_password(password, user=invitation_token.user, password_validators=get_password_validators(settings.AUTH_PASSWORD_VALIDATORS))
+                validate_password(password, user=invitation_token.user,
+                                  password_validators=get_password_validators(settings.AUTH_PASSWORD_VALIDATORS))
                 invitation_token.user.set_password(password)
                 invitation_token.user.save()
                 InvitationToken.objects.filter(user=invitation_token.user).delete()

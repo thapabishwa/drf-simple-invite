@@ -1,12 +1,9 @@
+from django.conf.urls import url
 from django.contrib import admin
-from django.urls import path
-from django.conf.urls import url, include
-from django.conf import settings
 from django.urls import path, re_path, include, reverse_lazy
-from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
-from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
+from rest_framework.routers import DefaultRouter
 from users.views import UserViewSet, UserCreateViewSet
 
 router = DefaultRouter()
