@@ -9,9 +9,9 @@ from rest_framework import viewsets, mixins, status, serializers
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from .models import InvitationToken
-from .serializers import PasswordSerializer, EmailSerializer
-
+from drf_simple_invite.models import InvitationToken
+from drf_simple_invite.serializers import PasswordSerializer, EmailSerializer
+from drf_simple_invite.signals import invitation_token_created, pre_token_creation, post_token_creation
 
 class SetUserPasswordViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = (AllowAny,)

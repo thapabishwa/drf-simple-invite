@@ -2,7 +2,7 @@ from django.conf.urls import include
 from django.urls import path
 from rest_framework import routers
 
-from .views import SetUserPasswordViewSet, InviteUserViewSet
+from drf_simple_invite.views import SetUserPasswordViewSet, InviteUserViewSet
 
 router = routers.DefaultRouter()
 
