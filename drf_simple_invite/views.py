@@ -12,7 +12,7 @@ from drf_simple_invite.models import InvitationToken
 from drf_simple_invite.serializers import PasswordSerializer, EmailSerializer
 from .models import AUTH_USER_MODEL
 
-class InvitationTokenViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class SetUserPasswordViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = (AllowAny,)
     serializer_class = PasswordSerializer
 
@@ -38,8 +38,8 @@ class InvitationTokenViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             pass
 
 
-class InviteViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
-    permission_classes = (IsAuthenticated)
+class InviteUserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    permission_classes = (IsAuthenticated,)
     serializer_class = EmailSerializer
 
     def create(self, request, *args, **kwargs):
