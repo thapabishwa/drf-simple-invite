@@ -10,7 +10,8 @@ from rest_framework.response import Response
 
 from drf_simple_invite.models import InvitationToken
 from drf_simple_invite.serializers import PasswordSerializer, EmailSerializer
-from .models import AUTH_USER_MODEL
+
+from django.contrib.auth import get_user_model
 
 class SetUserPasswordViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = (AllowAny,)
@@ -47,12 +48,7 @@ class InviteUserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
 
         email = request.data['email']
-        try:
-            users = AUTH_USER_MODEL.objects.get(email__iexact=email)
-        except:
-            pass
-        try:
-            InvitationToken.objects.create(users=users)
-            return Response({'detail': 'Invite User'})
-        except:
-            pass
+        print(email)
+        users = get_object_or_404(get_user_model(), email=email)
+        InvitationToken.objects.create(user=users)
+        return Response({'detail': 'Invite User Done'}, status=status.HTTP_200_OK)
