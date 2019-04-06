@@ -15,6 +15,23 @@ class InvitationToken(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("When was the token generated"))
 
+    ip_address = models.GenericIPAddressField(
+        _("The IP address of this session"),
+        default="127.0.0.1"
+    )
+
+
+    user_agent = models.CharField(
+        max_length=256,
+        verbose_name=_("HTTP User Agent"),
+        default=""
+    )
+
+
+    def __str__(self):
+        return "Invitation token for user %s is %s." % (user, id)
+    
+
 
 def get_invitation_token_expiry_time():
     return getattr(settings, 'DJANGO_REST_INVITATION_TOKEN_EXPIRY_TIME', 24)
