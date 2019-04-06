@@ -1,4 +1,5 @@
 Django
 djangorestframework
 twine
+wheel
 drf-simple-invite

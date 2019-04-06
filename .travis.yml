@@ -17,6 +17,6 @@ cache:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: python setup.py sdist && twine upload dist/*  --verbose
+    script: python setup.py sdist bdist_wheel && twine upload dist/*  --verbose
     on:
       tags: true
