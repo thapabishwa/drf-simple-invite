@@ -5,40 +5,43 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password, get_password_validators
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, mixins, status, serializers
+from rest_framework import viewsets, mixins, status, serializers, generics, views
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from .models import InvitationToken
-from .serializers import PasswordSerializer, EmailSerializer
+from drf_simple_invite.models import InvitationToken
+from drf_simple_invite.serializers import PasswordSerializer, EmailSerializer
+from drf_simple_invite.signals import invitation_token_created, pre_token_creation, post_token_creation
 
 
-class SetUserPasswordViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class SetUserPasswordView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = PasswordSerializer
 
-    def create(self, request, *args, **kwargs):
-        if 'invitation_token' in kwargs:
-            invitation_token = kwargs['invitation_token']
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            invitation_token = request.data['invitation_token']
             decoded_token = base64.urlsafe_b64decode(invitation_token.encode()).decode()
             invitation_token = get_object_or_404(InvitationToken, id=decoded_token)
-            password = self.request.data['password']
+        except Exception as e:
+            raise serializers.ValidationError({'detail': 'Invalid Invitation Token'})
 
-            try:
-                validate_password(password, user=invitation_token.user,
-                                  password_validators=get_password_validators(settings.AUTH_PASSWORD_VALIDATORS))
-                invitation_token.user.set_password(password)
-                invitation_token.user.is_active = True
-                invitation_token.user.save()
-                InvitationToken.objects.filter(user=invitation_token.user).delete()
-                return Response({'detail': 'Password sucessfully created.'}, status=status.HTTP_201_CREATED)
-            except ValidationError as e:
-                raise serializers.ValidationError(e.messages)
+        try:
+            password = request.data['password']
+            validate_password(password, user=invitation_token.user, password_validators=get_password_validators(settings.AUTH_PASSWORD_VALIDATORS))
+            invitation_token.user.set_password(password)
+            invitation_token.user.is_active = True
+            invitation_token.user.save()
+            InvitationToken.objects.filter(user=invitation_token.user).delete()
+        except ValidationError as e:
+            raise serializers.ValidationError({e.messages})
 
-        return Response({'detail': 'Cannot Find Invitation Token in the url.'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'detail': 'Password sucessfully created.'}, status=status.HTTP_201_CREATED)
 
 
-class InviteUserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class InviteUserView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = EmailSerializer
 
@@ -46,6 +49,12 @@ class InviteUserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         email = request.data['email']
-        users = get_object_or_404(get_user_model(), email=email)
-        InvitationToken.objects.create(user=users)
+        user = get_object_or_404(get_user_model(), email=email)
+
+        if user.is_active:
+            raise serializers.ValidationError({'detail': 'Cannot Invite Active User'})
+
+        invitation_token = InvitationToken.objects.create(user=user)
+        encoded = base64.urlsafe_b64encode(str(invitation_token.id).encode()).decode()
+        invitation_token_created.send(sender=self.__class__, instance=self, invitation_token=encoded)
         return Response({'detail': 'Invite User Done'}, status=status.HTTP_200_OK)

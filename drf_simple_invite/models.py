@@ -32,12 +32,3 @@ class InvitationToken(models.Model):
 
 def get_invitation_token_expiry_time():
     return getattr(settings, 'DJANGO_REST_INVITATION_TOKEN_EXPIRY_TIME', 24)
-
-
-@receiver(post_save, sender=InvitationToken)
-def send_email(sender, instance, **kwargs):
-    api_root = 'http://test.com/api/v1/invite/'
-    encoded = base64.urlsafe_b64encode(str(instance.id).encode()).decode()
-    api_root = api_root + encoded
-    return send_mail('Invitation token for %s' % instance.user.email,
-                     api_root, "superuser@yourdomain.com", [instance.user.email, ], fail_silently=False)

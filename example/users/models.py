@@ -12,6 +12,9 @@ from django.utils.translation import gettext_lazy as _
 # DRF Imports
 from rest_framework.authtoken.models import Token
 
+# Simple Invite
+from drf_simple_invite.signals import invitation_token_created
+
 # Project Imports
 from .managers import UserManager
 
@@ -66,3 +69,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+
+@receiver(invitation_token_created)
+def check_the_token(sender, instance, invitation_token, *args, **kwargs):
+    print(invitation_token)
