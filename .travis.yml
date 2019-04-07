@@ -9,7 +9,7 @@ python:
 before_script:
   - pip install -r requirements.txt
 script:
-  - coverage run manage.py test
+  - cd example && ./manage.py migrate && coverage run manage.py test
 notifications:
   email: false
 cache:
