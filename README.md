@@ -9,7 +9,6 @@ This package provides a REST endpoint that verifies an token and set the passwor
 ## Quick Start
 
 1. Install the package from pypi using pip:
-TODO:
 ```bash
 pip install drf-simple-invite
 ```
@@ -56,15 +55,15 @@ where `${API_URL}/` is the url specified in your *urls.py* (e.g., `api/v1/invite
 and `{invitation_token}` is `base64.urlsafe` encoded uuid token. Since it is unsafe to use plain uuid, always make sure that the `{invitation_token}` is `base64.urlsafe` encoded
 
 
-### Configuration / Settings
+### TODO: Configuration / Settings / Management Command
 
 The following settings can be set in Django ``settings.py`` file:
 
 * `DJANGO_REST_INVITATION_TOKEN_EXPIRY_TIME` - time in hours about how long the token is active (Default: 24)
 
- TODO: **Please note**: expired tokens are automatically cleared based on this setting in every call of ``post`` method on this endpoint.
+ **Please note**: expired tokens are automatically cleared based on this setting in every call of ``post`` method on this endpoint.
  
 ### Signals
 * ```invitation_token_created(sender, instance, invitation_token)``` - Fired when a reset password token is generated
-* ```pre_password_reset(user)``` - fired just before a password is being set
-* ```post_password_reset(user)``` - fired after a password has been set
+* ```pre_password_creation(user)``` - fired just before a password is being set
+* ```post_password_creation(user)``` - fired after a password has been set
