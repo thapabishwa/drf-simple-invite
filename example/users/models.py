@@ -1,6 +1,6 @@
 # Python Imports
 import uuid
-
+from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
@@ -71,5 +71,5 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 
 @receiver(invitation_token_created)
-def check_the_token(sender, instance, invitation_token, *args, **kwargs):
-    print(invitation_token)
+def check_the_token(sender, instance, invitation_token, user, *args, **kwargs):
+    send_mail('Invitation Token', invitation_token, 'superuser@example-project.com', [user.email,], fail_silently=False)

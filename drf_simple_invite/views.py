@@ -37,7 +37,7 @@ class SetUserPasswordView(generics.CreateAPIView):
             invitation_token.user.save()
             InvitationToken.objects.filter(user=invitation_token.user).delete()
         except ValidationError as e:
-            raise serializers.ValidationError({e.messages})
+            raise serializers.ValidationError({'detail': e.messages})
 
         return Response({'detail': 'Password sucessfully created.'}, status=status.HTTP_201_CREATED)
 
@@ -57,5 +57,5 @@ class InviteUserView(generics.CreateAPIView):
 
         invitation_token = InvitationToken.objects.create(user=user)
         encoded = base64.urlsafe_b64encode(str(invitation_token.id).encode()).decode()
-        invitation_token_created.send(sender=self.__class__, instance=self, invitation_token=encoded)
-        return Response({'detail': 'Invite User Done'}, status=status.HTTP_200_OK)
+        invitation_token_created.send(sender=self.__class__, instance=invitation_token, invitation_token=encoded, user=user)
+        return Response({'detail': 'User Invited Successfully'}, status=status.HTTP_200_OK)

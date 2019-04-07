@@ -8,8 +8,8 @@ from users.views import UserViewSet, UserCreateViewSet
 
 router = DefaultRouter()
 
-router.register(r'signup', UserCreateViewSet, basename='signup')
-router.register(r'users', UserViewSet, basename='user')
+router.register(r'signup', UserCreateViewSet, base_name='user-create')
+router.register(r'users', UserViewSet, base_name='user-list')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

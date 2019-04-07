@@ -41,7 +41,7 @@ def create_invitation_token(sender, instance=None, created=False, **kwargs):
     if created:
         invitation_token = InvitationToken.objects.create(user=instance)
         encoded = base64.urlsafe_b64encode(str(invitation_token.id).encode()).decode()
-        invitation_token_created.send(sender=sender, instance=instance, invitation_token=encoded)
+        invitation_token_created.send(sender=sender, instance=instance, user=instance, invitation_token=encoded)
 
 
 def get_invitation_token_expiry_time():

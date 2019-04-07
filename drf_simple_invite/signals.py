@@ -6,7 +6,7 @@ __all__ = [
     'post_password_creation'
 ]
 invitation_token_created = django.dispatch.Signal(
-    providing_args=["instance", "invitation_token"],
+    providing_args=["instance", "invitation_token", "user"],
 )
 
 pre_password_creation = django.dispatch.Signal(providing_args=["user"])
