@@ -51,8 +51,8 @@ class InviteUserView(generics.CreateAPIView):
         email = request.data['email']
         user = get_object_or_404(get_user_model(), email=email)
 
-        #if user.is_active:
-        #    raise serializers.ValidationError({'detail': 'Cannot Invite Active User'})
+        if user.is_active:
+            raise serializers.ValidationError({'detail': 'Cannot Invite Active User'})
 
         invitation_token = InvitationToken.objects.create(user=user)
         encoded = base64.urlsafe_b64encode(str(invitation_token.id).encode()).decode()
