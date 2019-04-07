@@ -26,7 +26,7 @@ class SetUserPasswordView(generics.CreateAPIView):
             decoded_token = base64.urlsafe_b64decode(invitation_token.encode()).decode()
             invitation_token = get_object_or_404(InvitationToken, id=decoded_token)
         except Exception as e:
-            return Response({'detail': 'Invalid Invitation Token'})
+            raise serializers.ValidationError({'detail': 'Invalid Invitation Token'})
 
         try:
             password = request.data['password']
