@@ -62,8 +62,9 @@ The following settings can be set in Django ``settings.py`` file:
 
 * `DJANGO_REST_INVITATION_TOKEN_EXPIRY_TIME` - time in hours about how long the token is active (Default: 24)
 
-  **Please note**: expired tokens are automatically cleared based on this setting in every call of ``post`` method on this endpoint.
+ TODO: **Please note**: expired tokens are automatically cleared based on this setting in every call of ``post`` method on this endpoint.
  
 ### Signals
-TODO: signals must be used to send emails to the target user.
-
+* ```invitation_token_created(sender, instance, invitation_token)``` - Fired when a reset password token is generated
+* ```pre_password_reset(user)``` - fired just before a password is being set
+* ```post_password_reset(user)``` - fired after a password has been set
