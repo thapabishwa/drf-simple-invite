@@ -19,7 +19,7 @@ setup(
     description='An extension of django rest framework that allows to invite user via email',
     long_description=README,
     long_description_content_type='text/markdown',  # This is important for README.md in markdown format
-    url='https://github.com/thapabishwa/drf_simple_invite/edit/master/setup.py',
+    url='https://github.com/thapabishwa/drf-simple-invite/',
     author='Bishwa Thapa',
     author_email='thapabishwa@aol.com',
     classifiers=[

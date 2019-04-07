@@ -14,7 +14,6 @@ from rest_framework.authtoken.models import Token
 
 # Simple Invite
 from drf_simple_invite.signals import invitation_token_created
-
 # Project Imports
 from .managers import UserManager
 

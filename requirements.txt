@@ -3,3 +3,4 @@ djangorestframework
 twine
 wheel
 drf-simple-invite
+factory_boy

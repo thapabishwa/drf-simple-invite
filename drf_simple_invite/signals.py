@@ -1,5 +1,6 @@
 import django.dispatch
-__all__ =[
+
+__all__ = [
     'invitation_token_created',
     'pre_token_creation',
     'post_token_creation'

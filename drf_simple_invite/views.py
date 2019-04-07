@@ -5,13 +5,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password, get_password_validators
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, mixins, status, serializers, generics, views
+from rest_framework import status, serializers, generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from drf_simple_invite.models import InvitationToken
 from drf_simple_invite.serializers import PasswordSerializer, EmailSerializer
-from drf_simple_invite.signals import invitation_token_created, pre_token_creation, post_token_creation
+from drf_simple_invite.signals import invitation_token_created
 
 
 class SetUserPasswordView(generics.CreateAPIView):
@@ -30,7 +30,8 @@ class SetUserPasswordView(generics.CreateAPIView):
 
         try:
             password = request.data['password']
-            validate_password(password, user=invitation_token.user, password_validators=get_password_validators(settings.AUTH_PASSWORD_VALIDATORS))
+            validate_password(password, user=invitation_token.user,
+                              password_validators=get_password_validators(settings.AUTH_PASSWORD_VALIDATORS))
             invitation_token.user.set_password(password)
             invitation_token.user.is_active = True
             invitation_token.user.save()

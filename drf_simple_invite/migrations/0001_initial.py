@@ -23,9 +23,10 @@ class Migration(migrations.Migration):
                 ('ip_address',
                  models.GenericIPAddressField(default='127.0.0.1', verbose_name='The IP address of this session')),
                 ('user_agent', models.CharField(default='', max_length=256, verbose_name='HTTP User Agent')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='invitation_tokes',
-                                           to=settings.AUTH_USER_MODEL,
-                                           verbose_name='The User which is associated to this invitation token')),
+                (
+                'user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='invitation_tokens',
+                                          to=settings.AUTH_USER_MODEL,
+                                          verbose_name='The User which is associated to this invitation token')),
             ],
         ),
     ]
