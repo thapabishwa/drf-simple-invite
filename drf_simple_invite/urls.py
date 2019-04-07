@@ -1,14 +1,14 @@
-from django.conf.urls import include
+from django.conf.urls import include, url
 from django.urls import path
 from rest_framework import routers
 
-from drf_simple_invite.views import SetUserPasswordViewSet, InviteUserViewSet
+from drf_simple_invite.views import SetUserPasswordView, InviteUserView
 
 router = routers.DefaultRouter()
 
-router.register(r'confirm/(?P<invitation_token>.+)', SetUserPasswordViewSet, base_name='confirm_user')
-router.register(r'', InviteUserViewSet, base_name='invite_user')
 app_name = 'drf_simple_invite'
 urlpatterns = [
-    path(r'', include(router.urls)),
+
+    url(r'^confirm', SetUserPasswordView.as_view(), name='confirm-user'),
+    url(r'^', InviteUserView.as_view(), name='invite-user'),
 ]
