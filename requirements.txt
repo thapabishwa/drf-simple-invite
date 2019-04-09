@@ -5,3 +5,8 @@ wheel
 drf-simple-invite
 factory_boy
 coverage
+gunicorn
+newrelic
+django-storages
+boto3
+nose
