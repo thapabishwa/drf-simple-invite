@@ -10,7 +10,7 @@ before_script:
   - pip install -r requirements.txt
   - sudo apt-get autoremove sqlite3
   - sudo apt-get install python-software-properties
-  - sudo add-apt-repository ppa:jonathonf/backports 
+  - sudo add-apt-repository -y ppa:jonathonf/backports 
   - sudo apt-get -y update
   - sudo apt-cache show sqlite3
   - sudo apt-get install sqlite3
