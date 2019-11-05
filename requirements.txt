@@ -1,4 +1,4 @@
-Django==2.1.11
+Django==2.2.7
 djangorestframework
 twine
 wheel
