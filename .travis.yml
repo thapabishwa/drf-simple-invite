@@ -1,21 +1,17 @@
 sudo: required
 language: python
+services:
+  - docker
 env:
   global:
     - secure: K9JvlOWbtGqsjjLNSXLO94H8IsovJrGKr+JhXeI2xgPzU/myD3nIxv9Dbg6DP8fkpdR8dkUseSnUXn1aHCeeXFLwZfK4tXzjhvTsO/peCqf5Xk4Ga6Y+27tGktZu/eN3wcmJWzhFI4LhgwwK3JHpJYHeD0v9l0Ni5+v1eB98fBhRxcnXlazvfLrwiGMeCIHrpktkI+TWD6O9QB1HnXjKa12Ka/DMZiZXzVCWNmBXTCtR4SNxGwRfG+ObTHy0Z19sBZqxLc8fRHqqTWkyfjVJnG08NPUVL2lHMJmhSnRUghykOsZEJaBIWsiiFWikh9tpR8iILjoAQdKkDvtZIMSbbN/4YSrqn2Yb7g9SlDXn605lcTpsGnaKUImepGf/Ch90Jzedep5jFfCfjVEyA6VXzpJOmCTnnPrGpkMsX7xomwWvjUeG2D2wSD05I45NueCbAuYxHI2Z+SV2Jd5zmmvKRPSLrJl099re2k2eXI0sDlYWGsG5l3pwJs4WsdqRtFwsio38kQA8g2fboQqni/opO5dcFDNAqTzTfXB1ePUTwDxeZz5mzcFdooNbysRZtH/tguITqQBa1gmKRVXVvMEdstjTBfX2Hkz2ndyREr7fjOPTO9f7Cw1rslb+f/RvZAeisVxs+6FnFKbNPI7AStBFlrmxNYz3bMPTqPKIUy7YVj4=
     - secure: BSwE/CpggtSitQW/jSBIjWFpsOg7+PD312T32dH63h6Pe0f/mjMlnf5D8dI4U0+LS1bvL7QJRSHC88dq6Kdsx7ucATUyH7CnnE9xIZXEKyBpZOmKAcfq/4Lr3a2b7DVNDB+Nm8IIJdVDxlU+KJLMEMxtNXX4cgJ5iWP6U0cji/yEVY3JU96BDZCTwwT348d5Ed4wB352OIcG/FUSlQNTkihwo7BpbTUVttOoMTb1ryoP4ddN2K7ytA0+uVOIbDz/lihjhbLl4XGt8ydTpUk4tm2Kf2bDECiV2BF+a/c8W2EZ+Zx0mzHGYyViHA4s8dwn+fEcTEA9KjvTHYaB7rON68Zey65SJTpaVj5gEIS80hrJQ+5vSvZPSB7yqRp0FRcri25vCk+2PMcZHwyRsVnSYOxA/NaaVo0qANUkaYtCfoNX9rIRJPnbNYcEFO7BVfRzNQ1VV1d69xGrpR5Z4Zfs2Bpv6DwWtJ937fhWLN6t8bGi7poa5xqGxm+emVrmx8LvH6c9d19hysC/CzUnl5ZRP7/btb9aYMKeKxPD1OKgRg8/1ay28mk3ZAIvD8VCW3JeQyx3SG95PbBcxkSve3LJbyT0q0i3gzXGanaLcXT4bAQryRIMGv3G1GwkmQZ27vZi22RzTFixe3QXF/RQ66nmZaTYpBXbFVZBeCzyibWHQs0=
 python:
-  - '3.6'
+  - "3.6"
 before_script:
-  - pip install -r requirements.txt
-  - sudo apt-get autoremove sqlite3
-  - sudo apt-get install python-software-properties
-  - sudo add-apt-repository -y ppa:jonathonf/backports 
-  - sudo apt-cache show sqlite3
-  - sudo apt-get install sqlite3
-  - sudo sqlite3 -version
+  - docker build -t simple-invite .
 script:
-  - cd example && coverage run manage.py test
+  - docker run -it simple-invite coverage run manage.py test
 notifications:
   email: false
 cache:
