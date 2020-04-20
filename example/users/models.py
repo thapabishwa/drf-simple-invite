@@ -50,11 +50,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
-        help_text=_('Designates whether the user can log into this admin site.'),
+        help_text=_(
+            'Designates whether the user can log into this admin site.'),
     )
     is_active = models.BooleanField(
         _('active'),
-        default=True,
+        default=False,
         help_text=_(
             'Designates whether this user should be treated as active. ''Unselect this instead of deleting '
             'accounts. '
@@ -69,6 +70,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         )
     )
 
+    class Meta:
+        ordering = ['created_at']
+
     def __str__(self):
         return self.email
 
@@ -81,4 +85,5 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 @receiver(invitation_token_created)
 def check_the_token(sender, instance, invitation_token, user, *args, **kwargs):
-    send_mail('Invitation Token', invitation_token, 'superuser@example-project.com', [user.email,], fail_silently=False)
+    send_mail('Invitation Token', invitation_token,
+              'superuser@example-project.com', [user.email, ], fail_silently=False)

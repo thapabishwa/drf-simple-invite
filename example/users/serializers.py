@@ -8,6 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'first_name', 'last_name',)
 
+
 class CreateUserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
@@ -20,4 +21,4 @@ class CreateUserSerializer(serializers.ModelSerializer):
         model = User
         exclude = (
             'password', 'is_staff', 'is_superuser', 'is_active', 'is_verified', 'groups', 'user_permissions',
-            'last_login')
+            'last_login', 'username')
