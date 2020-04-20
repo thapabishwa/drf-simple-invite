@@ -27,13 +27,13 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = User
 
     id = factory.Faker('uuid4')
-    username = factory.Sequence(lambda n: f'testuser{n}')
-    email = factory.Faker('email')
+    username = factory.Faker('email')
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
     is_active = False
     is_staff = False
     is_verified = False
+    last_login = factory.Faker('date_time')
 
 
 class UserPasswordFactory(factory.django.DjangoModelFactory):
@@ -41,14 +41,15 @@ class UserPasswordFactory(factory.django.DjangoModelFactory):
         model = User
 
     id = factory.Faker('uuid4')
-    username = factory.Sequence(lambda n: f'testuser{n}')
-    email = factory.Faker('email')
+    username = factory.Faker('email')
     password = factory.Faker('password')
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('first_name')
     is_active = True
     is_staff = True
     is_verified = True
+    last_login = factory.Faker('date_time')
+
 
 
 class InvitationTokenFactory(factory.django.DjangoModelFactory):

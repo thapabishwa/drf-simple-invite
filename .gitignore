@@ -4,3 +4,5 @@
 *.pyc
 
 *.sqlite3
+
+*/venv/*

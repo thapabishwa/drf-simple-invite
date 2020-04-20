@@ -17,12 +17,19 @@ from drf_simple_invite.signals import invitation_token_created
 # Project Imports
 from .managers import UserManager
 
+import uuid
+from django.db import models
+from django.conf import settings
+from django.dispatch import receiver
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
+from django.db.models.signals import post_save
+from rest_framework.authtoken.models import Token
+from django.utils.translation import gettext_lazy as _
+from .managers import UserManager
+
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """
-    User represents an entity who can log into the application.
-    A user has at least one profile and may belong to one or many companies.
-    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -38,27 +45,29 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     objects = UserManager()
 
+    is_verified = models.BooleanField(_('verified'), default=False, help_text=_(
+        'Designates whether this user is verified or not.'))
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
         help_text=_('Designates whether the user can log into this admin site.'),
     )
-
     is_active = models.BooleanField(
         _('active'),
-        default=False,
+        default=True,
         help_text=_(
             'Designates whether this user should be treated as active. ''Unselect this instead of deleting '
             'accounts. '
         ),
     )
 
-    is_verified = models.BooleanField(_('verified'),
-                                      default=False,
-                                      help_text=_('Designates whether this user is verified or not.'))
-
-    class Meta:
-        ordering = ['email']
+    is_admin = models.BooleanField(
+        _('company admin'),
+        default=False,
+        help_text=_(
+            'Designates whether this user as a company admin or not'
+        )
+    )
 
     def __str__(self):
         return self.email
