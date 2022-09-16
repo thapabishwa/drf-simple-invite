@@ -5,10 +5,8 @@ __all__ = [
     'pre_password_creation',
     'post_password_creation'
 ]
-invitation_token_created = django.dispatch.Signal(
-    providing_args=["instance", "invitation_token", "user"],
-)
+invitation_token_created = django.dispatch.Signal()
 
-pre_password_creation = django.dispatch.Signal(providing_args=["user"])
+pre_password_creation = django.dispatch.Signal()
 
-post_password_creation = django.dispatch.Signal(providing_args=["user"])
+post_password_creation = django.dispatch.Signal()
