@@ -37,7 +37,7 @@ INSTALLED_APPS = [
 
 3. This package provides an endpoint, which can be included by including ``drf_simple_invite.urls`` in your ``urls.py`` as follows:
 ```python
-from django.conf.urls import url, include
+from django.urls import re_path as url, include
 
 urlpatterns = [
     url(r'api/v1/invite/', include('drf_simple_invite.urls', namespace='drf_simple_invite')),
@@ -54,6 +54,11 @@ The following endpoints are provided:
 where `${API_URL}/` is the url specified in your *urls.py* (e.g., `api/v1/invite/`)
 and `{invitation_token}` is `base64.urlsafe` encoded uuid token. Since it is unsafe to use plain uuid, always make sure that the `{invitation_token}` is `base64.urlsafe` encoded
 
+### Signals
+* ```invitation_token_created``` - Fired when a reset password token is generated
+* ```pre_password_creation``` - fired just before a password is being set
+* ```post_password_creation``` - fired after a password has been set
+
 
 ### TODO: Configuration / Settings / Management Command
 
@@ -62,8 +67,3 @@ The following settings can be set in Django ``settings.py`` file:
 * `DJANGO_REST_INVITATION_TOKEN_EXPIRY_TIME` - time in hours about how long the token is active (Default: 24)
 
  **Please note**: expired tokens are automatically cleared based on this setting in every call of ``post`` method on this endpoint.
- 
-### Signals
-* ```invitation_token_created(sender, instance, invitation_token)``` - Fired when a reset password token is generated
-* ```pre_password_creation(user)``` - fired just before a password is being set
-* ```post_password_creation(user)``` - fired after a password has been set
