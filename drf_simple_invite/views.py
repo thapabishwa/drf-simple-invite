@@ -10,7 +10,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from drf_simple_invite.models import InvitationToken
-from drf_simple_invite.serializers import PasswordSerializer, EmailSerializer
+from drf_simple_invite.serializers import PasswordSerializer, InviteEmailSerializer
 from drf_simple_invite.signals import invitation_token_created
 
 
@@ -30,6 +30,10 @@ class SetUserPasswordView(generics.CreateAPIView):
 
         try:
             password = request.data['password']
+            confirm_password = request.data['confirm_password']
+            if password != confirm_password:
+                raise ValidationError("Passwords do not match.")
+            # If passwords match then attempt to store the user password
             validate_password(password, user=invitation_token.user,
                               password_validators=get_password_validators(settings.AUTH_PASSWORD_VALIDATORS))
             invitation_token.user.set_password(password)
@@ -44,7 +48,7 @@ class SetUserPasswordView(generics.CreateAPIView):
 
 class InviteUserView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = EmailSerializer
+    serializer_class = InviteEmailSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
