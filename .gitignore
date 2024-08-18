@@ -12,3 +12,7 @@
 */_pycache_/*
 
 example/env/*
+
+dist/*
+drf_simple_invite.egg-info/*
+venv/*
